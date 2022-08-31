@@ -20,23 +20,80 @@
         <div class="container">
             <h2 class="text-center">Food Menu</h2>
 
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
-                </div>
+            <?php
 
-                <div class="food-menu-desc">
-                    <h4>Food Title</h4>
-                    <p class="food-price">$2.3</p>
-                    <p class="food-detail">
-                        Made with Italian Sauce, Chicken, and organice vegetables.
-                    </p>
-                    <br>
+                //geeting foods from the database that are active and featured
+                //sql query
 
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
->
+                $sql2="SELECT * FROM tbl_food WHERE active='yes' AND featured='yes' ";
+
+                //execution
+                $res=mysqli_query($conn,$sql2);
+
+                $count2=mysqli_num_rows($res);
+
+                //check weather avilable or not
+                if($count2>0)
+                {
+                    //food avilable
+                    while($row=mysqli_fetch_assoc($res))
+                    {
+                        //get all datas
+                        $id=$row['id'];
+                        $titile=$row['titile'];
+                        $price=$row['price'];
+                        $descrption=$row['descrption'];
+                        $image_name=$row['image_name'];
+
+                        ?>
+
+                                <div class="food-menu-box">
+                                    <div class="food-menu-img">
+                                    
+                          <?php
+
+                                if($image_name=="")
+                                {
+                                    //image not avilable
+                                    echo"<div class='error'>Image Not Avilable</div>";
+
+                                }
+                                else
+                                {
+                                    //image avilable
+                                    ?>
+                                    <img src="<?php echo HOME; ?>images/food/<?php echo $image_name;  ?>" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+                                    <?php
+
+
+                                }
+
+                            ?>
+                                        </div>
+                                        <div class="food-menu-desc">
+                                      <h4><?php  echo $titile;  ?></h4>
+                                        <p class="food-price"><?php echo $price;  ?></p>
+                                         <p class="food-detail">
+                                          <?php echo $descrption;  ?>
+                                         </p>
+                                                  <br>
+
+                                         <a href="<?php echo HOME;  ?>order.php?food_id=<?php echo $id; ?>" class="btn btn-primary">Order Now</a>
+                                  </div>
+                              </div>
+                        <?php
+                                }
+
+                            }
+                            else
+                            {
+                                //food not avilable
+                                echo"<div class='error'>Food Not Avilable</div>";
+
+                            }
+
+                        ?>
+
 
 
             <div class="clearfix"></div>
